@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Tag from "@/components/company/Tag";
 
 export default function CompanyItem({company, isLast}) {
     return <Link
@@ -8,9 +9,9 @@ export default function CompanyItem({company, isLast}) {
         <div className="flex flex-col gap-1">
             <div className="flex items-center gap-3">
                 <h1 className="font-semibold">{company.name}</h1>
-                <p className="opacity-60 text-xs">
-                    {company.est}
-                </p>
+                <Tag>
+                    Est. {company.est}
+                </Tag>
             </div>
             <p className="text-xs opacity-80">
                 {company.one_liner}
