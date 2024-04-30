@@ -9,7 +9,7 @@ export default function CompanyItem({company, isLast}) {
             <div className="flex items-center gap-3">
                 <h1 className="font-semibold">{company.name}</h1>
                 <p className="opacity-60 text-xs">
-                    {company.location}
+                    {company.one_liner}
                 </p>
             </div>
             <p className="text-xs opacity-80">
