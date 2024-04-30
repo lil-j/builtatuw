@@ -8,12 +8,12 @@ export default function CompanyItem({company, isLast}) {
         <div className="flex flex-col gap-1">
             <div className="flex items-center gap-3">
                 <h1 className="font-semibold">{company.name}</h1>
-                <p className="opacity-60 text-xs">
-                    {company.one_liner}
-                </p>
+                {/*<p className="opacity-60 text-xs">*/}
+                {/*    {company.one_liner}*/}
+                {/*</p>*/}
             </div>
             <p className="text-xs opacity-80">
-                {company.description}
+                {company.one_liner}
             </p>
         </div>
     </Link>
