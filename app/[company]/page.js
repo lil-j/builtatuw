@@ -9,13 +9,14 @@ import {
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
+import {ibm_plex_mono} from "@/fonts/ibm_plex_mono";
 
 export default async function Company({params}) {
     const company = await getCompany(params.company)
 
     return <div>
-        <div className="max-w-3xl mx-auto mt-24 px-5 md:px-0">
-            <Breadcrumb className="mb-6">
+        <div className="max-w-3xl mx-auto md:mt-24 mt-12 px-5 md:px-0">
+            <Breadcrumb className={ibm_plex_mono.className + " mb-6"}>
                 <BreadcrumbList>
                     <BreadcrumbItem>
                         <BreadcrumbLink href="/">Directory</BreadcrumbLink>

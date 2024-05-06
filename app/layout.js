@@ -1,7 +1,6 @@
-import { Inter } from "next/font/google";
+import {instrument_sans} from "@/fonts/instrument_sans";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Create Next App",
@@ -11,7 +10,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={instrument_sans.className + " border-4 rounded-lg border-purple-500 min-h-screen"}>{children}</body>
     </html>
   );
 }
