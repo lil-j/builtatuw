@@ -13,6 +13,7 @@ import {ibm_plex_mono} from "@/fonts/ibm_plex_mono";
 
 export default async function Company({params}) {
     const company = await getCompany(params.company)
+    console.log(company)
 
     return <div>
         <div className="max-w-3xl mx-auto md:mt-24 mt-12 px-5 md:px-0">
@@ -34,7 +35,7 @@ export default async function Company({params}) {
                     <p className="text-lg opacity-60">{company.one_liner}</p>
                     <div className="flex gap-3 mt-2 text-xs">
                         <Tag>
-                            Est. {company.est}
+                            Est. {new Date(company.launch_date).getFullYear()}
                         </Tag>
                     </div>
                 </div>
