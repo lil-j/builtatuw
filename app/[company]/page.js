@@ -13,7 +13,6 @@ import {ibm_plex_mono} from "@/fonts/ibm_plex_mono";
 
 export default async function Company({params}) {
     const company = await getCompany(params.company)
-    console.log(company)
 
     return <div>
         <div className="max-w-3xl mx-auto md:mt-24 mt-12 px-5 md:px-0">
