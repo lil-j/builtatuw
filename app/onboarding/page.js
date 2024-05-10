@@ -334,7 +334,7 @@ export default function Onboarding() {
                         <div className="flex flex-col gap-1">
                             <div className="flex items-center gap-3">
                                 <h1 className="font-semibold">{name}</h1>
-                                <Tag>Est. {estDate}</Tag>
+                                <Tag>Est. {estDate ? estDate.match(/,\s*(\d{4})/)[1] : ''}</Tag>
                             </div>
                             <div className="flex items-center gap-3">
                                 <p className="text-xs opacity-80">{oneLiner}</p>
