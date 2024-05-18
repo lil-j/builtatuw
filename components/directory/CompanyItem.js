@@ -9,9 +9,6 @@ export default function CompanyItem({company, isLast}) {
         <div className="flex flex-col gap-1">
             <div className="flex items-center gap-3">
                 <h1 className="font-semibold">{company.name}</h1>
-                <Tag>
-                    Est. {new Date(company.launch_date).getFullYear()}
-                </Tag>
             </div>
             <p className="text-xs opacity-80">
                 {company.one_liner}
