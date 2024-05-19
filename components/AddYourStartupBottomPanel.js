@@ -9,7 +9,7 @@ export default function AddYourStartupBottomPanel() {
     const [isOpen, setIsOpen] = useState(true)
 
     useEffect(() => {
-        if (pathname === "/onboarding") {
+        if (pathname === "/setup-account" || pathname === "/add-company") {
             setIsOpen(false)
         } else {
             if (!isOpen) setIsOpen(true)
@@ -29,7 +29,7 @@ export default function AddYourStartupBottomPanel() {
                     <div className="px-5 md:px-0 flex justify-between items-center">
                         <p className="font-medium">Working on something? Add your startup in <span
                             className="text-purple-400">3 minutes.</span></p>
-                        <Link href="/onboarding"
+                        <Link href="/add-company"
                               className="bg-black/80 font-medium text-sm text-center whitespace-nowrap text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity">Add
                             your startup</Link>
                     </div>

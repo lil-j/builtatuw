@@ -14,10 +14,10 @@ import Navbar from "@/components/Navbar";
 
 export default async function Company({params}) {
     const company = await getCompany(params.company)
-
+console.log(company.company_founders)
     return <div>
         <Navbar>
-            <Breadcrumb className={ibm_plex_mono.className}>
+            <Breadcrumb className={ibm_plex_mono.className + "s cursor-default"}>
                 <BreadcrumbList>
                     <BreadcrumbSeparator className="text-white"/>
                     <BreadcrumbItem>
@@ -71,21 +71,26 @@ export default async function Company({params}) {
                     <h2 className="text-xl font-semibold mb-3">Meet the Team</h2>
                     <div className="flex flex-col gap-3">
                         {
-                            company.company_founders.map(({founder}) => <div
-                                    className="flex gap-3"
-                                    key={founder.id + "Founder"}>
-                                    <img src={founder.photo} alt={`${founder.name} photo`}
-                                         className="w-16 h-16 bg-gray-200 border-2 shadow-md border-purple-400 rounded-full"/>
-                                    <div>
-                                        <h3 className="text-lg font-medium">{founder.name}</h3>
-                                        <div className="flex gap-1 mt-1">
-                                            <Tag>{founder.major}</Tag>
-                                            <Tag>Graduates {founder.grad_year}</Tag>
+                            company.company_founders.map(({founder}) => {
+                                console.log(founder)
+                                    return <div
+                                        className="flex gap-3"
+                                        key={founder.id + "Founder"}>
+                                        {/*<img src={founder.photo} alt={`${founder.name} photo`}*/}
+                                        {/*     className="w-16 h-16 bg-gray-200 border-2 shadow-md border-purple-400 rounded-full"/>*/}
+                                        <div>
+                                            <h3 className="text-lg font-medium">{founder.name}</h3>
+                                            <a href={founder.linkedin}
+                                                  target={"_blank"}
+                                               className="opacity-60 mt-2 text-sm">{founder.linkedin}</a>
+                                            <div className="flex gap-1 mt-2">
+                                                <Tag>{founder.major}</Tag>
+                                                <Tag>Graduates {new Date(founder.grad_time).getFullYear()}</Tag>
+                                            </div>
                                         </div>
-                                        <p className="opacity-60 mt-2">{founder.bio}</p>
-                                    </div>
 
-                                </div>
+                                    </div>
+                                }
                             )
                         }
                     </div>
