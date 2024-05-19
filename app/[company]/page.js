@@ -67,7 +67,7 @@ console.log(company.company_founders)
             </div>
             </div>
             <div>
-                <div className="mt-12 max-w-3xl mx-auto">
+                <div className="mt-12 max-w-3xl mx-auto px-5 md:px-0">
                     <h2 className="text-xl font-semibold mb-3">Meet the Team</h2>
                     <div className="flex flex-col gap-3">
                         {
