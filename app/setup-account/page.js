@@ -30,7 +30,7 @@ export default async function SetupAccount() {
 
         <div className="max-w-3xl mx-auto mt-16 px-5 md:px-0">
             <h1 className="text-2xl text-black/90 font-bold mb-12">
-                Setup your account to add your startup to the University of Washington Startup Directory.
+                <span className="text-purple-500">Setup your account</span> to add your startup to the University of Washington Startup Directory.
             </h1>
             <SetupAccountForm  columns={columns}/>
         </div>
