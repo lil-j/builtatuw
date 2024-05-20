@@ -3,8 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button"
+import { CalendarIcon } from "lucide-react"
 import {
     Form,
     FormControl,
@@ -24,7 +27,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
+import { Calendar } from "@/components/ui/calendar"
 
 const FormSchema = z.object({
     name: z.string().min(2, {
@@ -99,6 +108,10 @@ export function OnboardingForm({
                                     }}
                                 />
                             </FormControl>
+                            <FormDescription>
+                                This is your public Startup name.
+                            </FormDescription>
+
                             <FormMessage />
                         </FormItem>
                     )}
@@ -107,28 +120,45 @@ export function OnboardingForm({
                     control={form.control}
                     name="estDate"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="flex flex-col">
                             <FormLabel>Est. Date</FormLabel>
-                            <Select
-                                onValueChange={(value) => {
-                                    field.onChange(value);
-                                    setEstDate(value);
-                                }}
-                                defaultValue={estDate}
-                            >
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a year" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map((year) => (
-                                        <SelectItem key={year} value={year.toString()}>
-                                            {year}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <FormControl>
+                                        <Button
+                                            variant={"outline"}
+                                            className={cn(
+                                                "w-[240px] pl-3 text-left font-normal",
+                                                !field.value && "text-muted-foreground"
+                                            )}
+                                        >
+                                            {field.value ? (
+                                                format(field.value, "PPP")
+                                            ) : (
+                                                <span>Pick a date</span>
+                                            )}
+                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                        </Button>
+                                    </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0" align="start">
+                                    <Calendar
+                                        mode="single"
+                                        selected={field.value}
+                                        onSelect={(date) => {
+                                            field.onChange(date);
+                                            setEstDate(format(date, "PPP"));
+                                        }}
+                                        disabled={(date) =>
+                                            date > new Date() || date < new Date("1900-01-01")
+                                        }
+                                        initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                            <FormDescription>
+                                The date that you founded your startup.
+                            </FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
@@ -149,6 +179,10 @@ export function OnboardingForm({
                                     }}
                                 />
                             </FormControl>
+                            <FormDescription>
+                                List all founders involved.
+                            </FormDescription>
+
                             <FormMessage />
                         </FormItem>
                     )}
@@ -169,6 +203,10 @@ export function OnboardingForm({
                                     }}
                                 />
                             </FormControl>
+                            <FormDescription>
+                                Add a saying or quote that you can relate to.
+                            </FormDescription>
+
                             <FormMessage />
                         </FormItem>
                     )}
