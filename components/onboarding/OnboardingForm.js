@@ -252,7 +252,7 @@ export function OnboardingForm({
                                     {/*    <SelectItem value="all">All Industries</SelectItem>*/}
                                     {/*</SelectGroup>*/}
                                     <SelectGroup>
-                                        <SelectLabel>B2B</SelectLabel>
+                                        <SelectLabel>Category - B2B</SelectLabel>
                                         <SelectItem value="analytics">Analytics</SelectItem>
                                         <SelectItem value="engineering-product-design">Engineering, Product and
                                             Design</SelectItem>
@@ -271,11 +271,11 @@ export function OnboardingForm({
                                         <SelectItem value="supply-chain-logistics">Supply Chain and Logistics</SelectItem>
                                     </SelectGroup>
                                     <SelectGroup>
-                                        <SelectLabel>Education</SelectLabel>
+                                        <SelectLabel>Category - Education</SelectLabel>
                                         <SelectItem value="education">Education</SelectItem>
                                     </SelectGroup>
                                     <SelectGroup>
-                                        <SelectLabel>Fintech</SelectLabel>
+                                        <SelectLabel>Category - Fintech</SelectLabel>
                                         <SelectItem value="asset-management">Asset Management</SelectItem>
                                         <SelectItem value="banking-exchange">Banking and Exchange</SelectItem>
                                         <SelectItem value="consumer-finance">Consumer Finance</SelectItem>
@@ -284,7 +284,7 @@ export function OnboardingForm({
                                         <SelectItem value="payments">Payments</SelectItem>
                                     </SelectGroup>
                                     <SelectGroup>
-                                        <SelectLabel>Consumer</SelectLabel>
+                                        <SelectLabel>Category - Consumer</SelectLabel>
                                         <SelectItem value="apparel-cosmetics">Apparel and Cosmetics</SelectItem>
                                         <SelectItem value="consumer-electronics">Consumer Electronics</SelectItem>
                                         <SelectItem value="content">Content</SelectItem>
@@ -298,7 +298,7 @@ export function OnboardingForm({
                                         <SelectItem value="virtual-augmented-reality">Virtual and Augmented Reality</SelectItem>
                                     </SelectGroup>
                                     <SelectGroup>
-                                        <SelectLabel>Healthcare</SelectLabel>
+                                        <SelectLabel>Category - Healthcare</SelectLabel>
                                         <SelectItem value="consumer-health-wellness">Consumer Health and Wellness</SelectItem>
                                         <SelectItem value="diagnostics">Diagnostics</SelectItem>
                                         <SelectItem value="drug-discovery-delivery">Drug Discovery and Delivery</SelectItem>
@@ -309,12 +309,12 @@ export function OnboardingForm({
                                         <SelectItem value="therapeutics">Therapeutics</SelectItem>
                                     </SelectGroup>
                                     <SelectGroup>
-                                        <SelectLabel>Real Estate and Construction</SelectLabel>
+                                        <SelectLabel>Category - Real Estate and Construction</SelectLabel>
                                         <SelectItem value="construction">Construction</SelectItem>
                                         <SelectItem value="housing-real-estate">Housing and Real Estate</SelectItem>
                                     </SelectGroup>
                                     <SelectGroup>
-                                        <SelectLabel>Industrials</SelectLabel>
+                                        <SelectLabel>Category - Industrials</SelectLabel>
                                         <SelectItem value="agriculture">Agriculture</SelectItem>
                                         <SelectItem value="automotive">Automotive</SelectItem>
                                         <SelectItem value="aviation-space">Aviation and Space</SelectItem>
@@ -324,11 +324,11 @@ export function OnboardingForm({
                                         <SelectItem value="manufacturing-robotics">Manufacturing and Robotics</SelectItem>
                                     </SelectGroup>
                                     <SelectGroup>
-                                        <SelectLabel>Government</SelectLabel>
+                                        <SelectLabel>Category - Government</SelectLabel>
                                         <SelectItem value="government">Government</SelectItem>
                                     </SelectGroup>
                                     <SelectGroup>
-                                        <SelectLabel>Other</SelectLabel>
+                                        <SelectLabel>Category - Other</SelectLabel>
                                         <SelectItem value="unspecified">Unspecified</SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
