@@ -1,13 +1,13 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import {useFieldArray, useForm} from "react-hook-form"
 import { z } from "zod"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, Trash2 } from "lucide-react"
 import {
     Form,
     FormControl,
@@ -27,6 +27,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+
+import { Separator } from "@/components/ui/separator"
+
 import {
     Popover,
     PopoverContent,
@@ -34,19 +37,19 @@ import {
 } from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
 import { Calendar } from "@/components/ui/calendar"
+import {useRouter} from "next/navigation";
+import {addCompany} from "@/lib/actions";
+import {Checkbox} from "@/components/ui/checkbox";
 
 const FormSchema = z.object({
     name: z.string().min(2, {
         message: "Name must be at least 2 characters.",
     }),
-    estDate: z.string().regex(/^\d{4}$/, {
-        message: "Please select a valid year.",
-    }),
-    founders: z.string().min(2, {
-        message: "Please enter the founder(s) name(s).",
+    estDate: z.date({
+        required_error: "Please select a valid date.",
     }),
     oneLiner: z.string().min(2, {
-        message: "Please provide a brief description.",
+        message: "Please provide a brief one-line description.",
     }),
     description: z.string().min(10, {
         message: "Description must be at least 10 characters.",
@@ -54,7 +57,23 @@ const FormSchema = z.object({
     industry: z.string({
         required_error: "Please select an industry.",
     }),
-})
+    url: z.string().url({
+        message: "Please enter a valid URL.",
+    }),
+    location: z.string().min(2, {
+        message: "Location must be at least 2 characters.",
+    }),
+    founders: z.array(z.object({
+        name: z.string().min(2, {
+            message: "Please enter the co-founder's name.",
+        }),
+        linkedin: z.string().url({
+            message: "Please enter a valid LinkedIn URL.",
+        }).optional()
+    })),
+    plansToRaise: z.boolean().optional()
+});
+
 
 export function OnboardingForm({
                                    name,
@@ -71,31 +90,54 @@ export function OnboardingForm({
                                    setIndustry,
                                    logo,
                                    setLogo,
+                                   url,
+                                   setUrl,
+                                   location,
+                                   setLocation,
+                                   plansToRaise,
+                                   setPlansToRaise
                                }) {
     const form = useForm({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             name: "",
             estDate: "",
-            founders: "",
             oneLiner: "",
             description: "",
             industry: "",
+            founders: [{ name: "", linkedin: "" }],
+            plansToRaise: false
         },
     })
 
-    function onSubmit(values) {
-        // Submit the form values
-        console.log(values)
-    }
+    const { fields, append, remove } = useFieldArray({
+        control: form.control,
+        name: "founders"
+    });
 
+    const router = useRouter();
+
+    async function onSubmit(formData) {
+        console.log(formData)
+        try {
+            const response = await addCompany(formData);
+            if (response.success) {
+                // Company added successfully
+                router.push(`/${response.slug}`);
+            } else {
+                console.error('Error adding company');
+            }
+        } catch (error) {
+            console.error('Error adding company:', error);
+        }
+    }
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
                     control={form.control}
                     name="name"
-                    render={({ field }) => (
+                    render={({field}) => (
                         <FormItem>
                             <FormLabel>Name</FormLabel>
                             <FormControl>
@@ -112,14 +154,14 @@ export function OnboardingForm({
                                 This is your public Startup name.
                             </FormDescription>
 
-                            <FormMessage />
+                            <FormMessage/>
                         </FormItem>
                     )}
                 />
                 <FormField
                     control={form.control}
                     name="estDate"
-                    render={({ field }) => (
+                    render={({field}) => (
                         <FormItem className="flex flex-col">
                             <FormLabel>Est. Date</FormLabel>
                             <Popover>
@@ -137,7 +179,7 @@ export function OnboardingForm({
                                             ) : (
                                                 <span>Pick a date</span>
                                             )}
-                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50"/>
                                         </Button>
                                     </FormControl>
                                 </PopoverTrigger>
@@ -159,38 +201,120 @@ export function OnboardingForm({
                             <FormDescription>
                                 The date that you founded your startup.
                             </FormDescription>
-                            <FormMessage />
+                            <FormMessage/>
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="founders"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Founder(s)</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    placeholder="Founder(s)"
-                                    onChange={(e) => {
-                                        field.onChange(e);
-                                        setFounders(e.target.value);
-                                    }}
-                                />
-                            </FormControl>
-                            <FormDescription>
-                                List all founders involved.
-                            </FormDescription>
 
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                    <div className="space-y-2">
+                        <FormLabel>Co-founders</FormLabel>
+                        {fields.map((field, index) => (
+                            <div key={field.id} className="space-x-1 flex flex-row">
+                                <div className="w-[50%]">
+                                    <FormField
+                                        control={form.control}
+                                        name={`founders.${index}.name`}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="Co-founder name"
+                                                        onBlur={() => {
+                                                            if (index === fields.length - 1 && field.value) {
+                                                                append({ name: "", linkedin: "" });
+                                                            }
+                                                        }}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <Separator orientation="vertical" />
+                                <div className="w-[50%]">
+                                    <FormField
+                                        control={form.control}
+                                        name={`founders.${index}.linkedin`}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input
+                                                        {...field}
+                                                        placeholder="LinkedIn URL"
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                {fields.length > 1 && (
+                                    <Button type="button" onClick={() => remove(index)}>
+                                        <Trash2 />
+                                    </Button>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+
+
+                {/*<FormField*/}
+                {/*    control={form.control}*/}
+                {/*    name="founders"*/}
+                {/*    render={({ field }) => (*/}
+                {/*        <FormItem>*/}
+                {/*            <FormLabel>Founder(s)</FormLabel>*/}
+                {/*            <FormControl>*/}
+                {/*                <Input*/}
+                {/*                    {...field}*/}
+                {/*                    placeholder="Founder(s)"*/}
+                {/*                    onChange={(e) => {*/}
+                {/*                        field.onChange(e);*/}
+                {/*                        setFounders(e.target.value);*/}
+                {/*                    }}*/}
+                {/*                />*/}
+                {/*            </FormControl>*/}
+                {/*            <FormDescription>*/}
+                {/*                List all founders involved.*/}
+                {/*            </FormDescription>*/}
+
+                {/*            <FormMessage />*/}
+                {/*        </FormItem>*/}
+                {/*    )}*/}
+                {/*/>*/}
+
+                {/*<FormField*/}
+                {/*    control={form.control}*/}
+                {/*    name="linkedin"*/}
+                {/*    render={({ field }) => (*/}
+                {/*        <FormItem>*/}
+                {/*            <FormLabel>LinkedIn</FormLabel>*/}
+                {/*            <FormControl>*/}
+                {/*                <Input*/}
+                {/*                    {...field}*/}
+                {/*                    placeholder="linkedin.com/in/your-username/"*/}
+                {/*                    onChange={(e) => {*/}
+                {/*                        field.onChange(e);*/}
+                {/*                        setLinkedin(e.target.value);*/}
+                {/*                    }}*/}
+                {/*                />*/}
+                {/*            </FormControl>*/}
+                {/*            <FormDescription>*/}
+                {/*                Add LinkedIn profile URL for each founder.*/}
+                {/*            </FormDescription>*/}
+
+                {/*            <FormMessage />*/}
+                {/*        </FormItem>*/}
+                {/*    )}*/}
+                {/*/>*/}
                 <FormField
                     control={form.control}
                     name="oneLiner"
-                    render={({ field }) => (
+                    render={({field}) => (
                         <FormItem>
                             <FormLabel>One-liner</FormLabel>
                             <FormControl>
@@ -207,14 +331,14 @@ export function OnboardingForm({
                                 Add a saying or quote that you can relate to.
                             </FormDescription>
 
-                            <FormMessage />
+                            <FormMessage/>
                         </FormItem>
                     )}
                 />
                 <FormField
                     control={form.control}
                     name="description"
-                    render={({ field }) => (
+                    render={({field}) => (
                         <FormItem>
                             <FormLabel>Description</FormLabel>
                             <FormControl>
@@ -227,6 +351,47 @@ export function OnboardingForm({
                                     }}
                                 />
                             </FormControl>
+                            <FormMessage/>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="url"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel>Website URL</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    placeholder="https://yourstartup.com"
+                                    onChange={(e) => {
+                                        field.onChange(e);
+                                        setUrl(e.target.value);
+                                    }}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="location"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel>Location</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    placeholder="Location of your startup"
+                                    onChange={(e) => {
+                                        field.onChange(e);
+                                        setLocation(e.target.value);
+                                    }}
+                                />
+                            </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
@@ -234,7 +399,7 @@ export function OnboardingForm({
                 <FormField
                     control={form.control}
                     name="industry"
-                    render={({ field }) => (
+                    render={({field}) => (
                         <FormItem>
                             <FormLabel>Industry</FormLabel>
                             <Select
@@ -243,7 +408,7 @@ export function OnboardingForm({
                             >
                                 <FormControl>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select an industry" />
+                                        <SelectValue placeholder="Select an industry"/>
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -268,7 +433,8 @@ export function OnboardingForm({
                                         <SelectItem value="retail">Retail</SelectItem>
                                         <SelectItem value="sales">Sales</SelectItem>
                                         <SelectItem value="security">Security</SelectItem>
-                                        <SelectItem value="supply-chain-logistics">Supply Chain and Logistics</SelectItem>
+                                        <SelectItem value="supply-chain-logistics">Supply Chain and
+                                            Logistics</SelectItem>
                                     </SelectGroup>
                                     <SelectGroup>
                                         <SelectLabel>Category - Education</SelectLabel>
@@ -294,14 +460,18 @@ export function OnboardingForm({
                                         <SelectItem value="job-career-services">Job and Career Services</SelectItem>
                                         <SelectItem value="social">Social</SelectItem>
                                         <SelectItem value="transportation-services">Transportation Services</SelectItem>
-                                        <SelectItem value="travel-leisure-tourism">Travel, Leisure and Tourism</SelectItem>
-                                        <SelectItem value="virtual-augmented-reality">Virtual and Augmented Reality</SelectItem>
+                                        <SelectItem value="travel-leisure-tourism">Travel, Leisure and
+                                            Tourism</SelectItem>
+                                        <SelectItem value="virtual-augmented-reality">Virtual and Augmented
+                                            Reality</SelectItem>
                                     </SelectGroup>
                                     <SelectGroup>
                                         <SelectLabel>Category - Healthcare</SelectLabel>
-                                        <SelectItem value="consumer-health-wellness">Consumer Health and Wellness</SelectItem>
+                                        <SelectItem value="consumer-health-wellness">Consumer Health and
+                                            Wellness</SelectItem>
                                         <SelectItem value="diagnostics">Diagnostics</SelectItem>
-                                        <SelectItem value="drug-discovery-delivery">Drug Discovery and Delivery</SelectItem>
+                                        <SelectItem value="drug-discovery-delivery">Drug Discovery and
+                                            Delivery</SelectItem>
                                         <SelectItem value="healthcare-it">Healthcare IT</SelectItem>
                                         <SelectItem value="healthcare-services">Healthcare Services</SelectItem>
                                         <SelectItem value="industrial-bio">Industrial Bio</SelectItem>
@@ -321,7 +491,8 @@ export function OnboardingForm({
                                         <SelectItem value="climate">Climate</SelectItem>
                                         <SelectItem value="drones">Drones</SelectItem>
                                         <SelectItem value="energy">Energy</SelectItem>
-                                        <SelectItem value="manufacturing-robotics">Manufacturing and Robotics</SelectItem>
+                                        <SelectItem value="manufacturing-robotics">Manufacturing and
+                                            Robotics</SelectItem>
                                     </SelectGroup>
                                     <SelectGroup>
                                         <SelectLabel>Category - Government</SelectLabel>
@@ -333,7 +504,7 @@ export function OnboardingForm({
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
-                            <FormMessage />
+                            <FormMessage/>
                         </FormItem>
 
                     )}
@@ -359,6 +530,54 @@ export function OnboardingForm({
                         </FormItem>
                     )}
                 />
+
+                <FormField
+                    control={form.control}
+                    name="plansToRaise"
+                    render={({field}) => (
+                        <FormItem
+                            className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                            <FormControl>
+                                <Checkbox
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                                <FormLabel>
+                                    Plans to Raise Funds
+                                </FormLabel>
+                                <FormDescription>
+                                    Indicate if your startup plans to raise funds.
+                                </FormDescription>
+                            </div>
+                        </FormItem>
+                    )}
+                />
+
+                {/*<FormField*/}
+                {/*    control={form.control}*/}
+                {/*    name="plansToRaise"*/}
+                {/*    render={({ field }) => (*/}
+                {/*        <FormItem>*/}
+                {/*            <FormLabel>Plans to Raise Funds</FormLabel>*/}
+                {/*            <FormControl>*/}
+                {/*                <Checkbox*/}
+                {/*                    {...field}*/}
+                {/*                    checked={field.value}*/}
+                {/*                    onCheckedChange={(value) => {*/}
+                {/*                        field.onChange(value);*/}
+                {/*                        setPlansToRaise(value);*/}
+                {/*                    }}*/}
+                {/*                />*/}
+                {/*            </FormControl>*/}
+                {/*            <FormDescription>*/}
+                {/*                Indicate if your startup plans to raise funds.*/}
+                {/*            </FormDescription>*/}
+                {/*            <FormMessage />*/}
+                {/*        </FormItem>*/}
+                {/*    )}*/}
+                {/*/>*/}
                 <Button type="submit">Submit</Button>
             </form>
         </Form>

@@ -274,15 +274,16 @@ const industryOptions = [
 export default function OnboardingContainer() {
     const [name, setName] = useState("Your startup name");
     const [estDate, setEstDate] = useState(null);
-    const [founders, setFounders] = useState("Your Name(s) here");
+    const [founders, setFounders] = useState([{ name: "", linkedin: "" }]);
     const [oneLiner, setOneLiner] = useState("A brief description of your startup");
     const [description, setDescription] = useState("A less-brief description of your startup. Lorum Ipsum");
     const [industry, setIndustry] = useState(null);
     const [uploadedLogo, setUploadedLogo] = useState(null);
+    const [url, setUrl] = useState("");
+    const [location, setLocation] = useState("");
+    const [plansToRaise, setPlansToRaise] = useState(null);
 
-    // for tagging system. design isn't done yet but this will automatically change the Industry and subsection on the preview card after selection
-    const selectedIndustry = industryOptions.find((option) => option.value === industry); // for tagging system
-
+    const selectedIndustry = industryOptions.find((option) => option.value === industry);
 
     return (
         <div className="">
@@ -300,44 +301,6 @@ export default function OnboardingContainer() {
                     }}
                 />
 
-                {/*<div className="rounded-lg border border-gray-300 overflow-hidden mb-4">*/}
-                {/*    <div*/}
-                {/*        className="py-6 px-3 w-full hover:bg-gray-100 active:bg-gray-200 transition-all border-gray-300 flex gap-3 items-center">*/}
-                {/*        {uploadedLogo ? (*/}
-                {/*            <img*/}
-                {/*                alt={`${name} logo`}*/}
-                {/*                src={URL.createObjectURL(uploadedLogo)}*/}
-                {/*                className="w-16 h-16 bg-gray-200 rounded-full"*/}
-                {/*            />*/}
-                {/*        ) : (*/}
-                {/*            <div className="w-16 h-16 bg-gray-300 rounded-full animate-pulse"/>*/}
-                {/*        )}*/}
-                {/*        <div className="flex flex-col gap-1">*/}
-                {/*            <div className="flex items-center gap-3">*/}
-                {/*                <h1 className="font-semibold">{name}</h1>*/}
-                {/*                <Tag>Est. {estDate}</Tag>*/}
-                {/*            </div>*/}
-                {/*            <div className="flex items-center gap-3">*/}
-                {/*                <p className="text-xs opacity-80">{oneLiner}</p>*/}
-                {/*                <div className="pl-1 flex gap-2">*/}
-                {/*                    {selectedIndustry ? (*/}
-                {/*                        <>*/}
-                {/*                            <Tag>{selectedIndustry.group}</Tag>*/}
-                {/*                            <Tag>{selectedIndustry.label}</Tag>*/}
-                {/*                        </>*/}
-                {/*                    ) : (*/}
-                {/*                        <>*/}
-                {/*                            /!*this looks like shit rn*!/*/}
-                {/*                            <Tag>Industry</Tag>*/}
-                {/*                            <Tag>Category</Tag>*/}
-                {/*                        </>*/}
-                {/*                    )}*/}
-                {/*                </div>*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-
                 <OnboardingForm
                     name={name}
                     setName={setName}
@@ -353,6 +316,12 @@ export default function OnboardingContainer() {
                     setIndustry={setIndustry}
                     logo={uploadedLogo}
                     setLogo={setUploadedLogo}
+                    url={url}
+                    setUrl={setUrl}
+                    location={location}
+                    setLocation={setLocation}
+                    plansToRaise={plansToRaise}
+                    setPlansToRaise={setPlansToRaise}
                 />
 
             </div>
