@@ -1,8 +1,5 @@
 "use client"
 
-import Marquee from "react-fast-marquee";
-import {ibm_plex_mono} from "@/fonts/ibm_plex_mono";
-
 import Tag from "@/components/company/Tag";
 import {OnboardingForm} from "@/components/onboarding/OnboardingForm";
 import {useState} from "react";
@@ -277,7 +274,7 @@ export default function OnboardingContainer() {
     const [founders, setFounders] = useState([{ name: "", linkedin: "" }]);
     const [oneLiner, setOneLiner] = useState("A brief description of your startup");
     const [description, setDescription] = useState("A less-brief description of your startup. Lorum Ipsum");
-    const [industry, setIndustry] = useState(null);
+    const [industry, setIndustry] = useState("");
     const [uploadedLogo, setUploadedLogo] = useState(null);
     const [url, setUrl] = useState("");
     const [location, setLocation] = useState("");

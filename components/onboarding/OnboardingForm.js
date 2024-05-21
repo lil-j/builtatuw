@@ -75,6 +75,7 @@ const FormSchema = z.object({
 });
 
 
+
 export function OnboardingForm({
                                    name,
                                    setName,
@@ -104,6 +105,7 @@ export function OnboardingForm({
             estDate: "",
             oneLiner: "",
             description: "",
+            url: "",
             industry: "",
             founders: [{ name: "", linkedin: "" }],
             plansToRaise: false
@@ -403,7 +405,10 @@ export function OnboardingForm({
                         <FormItem>
                             <FormLabel>Industry</FormLabel>
                             <Select
-                                onValueChange={(value) => setIndustry(value)}
+                                onValueChange={(value) => {
+                                    field.onChange(value);
+                                    setIndustry(value);
+                                }}
                                 defaultValue={industry}
                             >
                                 <FormControl>
@@ -555,29 +560,6 @@ export function OnboardingForm({
                     )}
                 />
 
-                {/*<FormField*/}
-                {/*    control={form.control}*/}
-                {/*    name="plansToRaise"*/}
-                {/*    render={({ field }) => (*/}
-                {/*        <FormItem>*/}
-                {/*            <FormLabel>Plans to Raise Funds</FormLabel>*/}
-                {/*            <FormControl>*/}
-                {/*                <Checkbox*/}
-                {/*                    {...field}*/}
-                {/*                    checked={field.value}*/}
-                {/*                    onCheckedChange={(value) => {*/}
-                {/*                        field.onChange(value);*/}
-                {/*                        setPlansToRaise(value);*/}
-                {/*                    }}*/}
-                {/*                />*/}
-                {/*            </FormControl>*/}
-                {/*            <FormDescription>*/}
-                {/*                Indicate if your startup plans to raise funds.*/}
-                {/*            </FormDescription>*/}
-                {/*            <FormMessage />*/}
-                {/*        </FormItem>*/}
-                {/*    )}*/}
-                {/*/>*/}
                 <Button type="submit">Submit</Button>
             </form>
         </Form>
