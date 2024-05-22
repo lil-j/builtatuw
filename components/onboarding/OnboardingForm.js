@@ -1,13 +1,13 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
+import {zodResolver} from "@hookform/resolvers/zod"
 import {useFieldArray, useForm} from "react-hook-form"
-import { z } from "zod"
-import { cn } from "@/lib/utils"
-import { format } from "date-fns";
+import {z} from "zod"
+import {cn} from "@/lib/utils"
+import {format} from "date-fns";
 
-import { Button } from "@/components/ui/button"
-import { CalendarIcon, Trash2 } from "lucide-react"
+import {Button} from "@/components/ui/button"
+import {CalendarIcon, Trash2} from "lucide-react"
 import {
     Form,
     FormControl,
@@ -17,7 +17,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import {Input} from "@/components/ui/input"
 import {
     Select,
     SelectContent,
@@ -28,18 +28,19 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 
-import { Separator } from "@/components/ui/separator"
+import {Separator} from "@/components/ui/separator"
 
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { Textarea } from "@/components/ui/textarea"
-import { Calendar } from "@/components/ui/calendar"
+import {Textarea} from "@/components/ui/textarea"
+import {Calendar} from "@/components/ui/calendar"
 import {useRouter} from "next/navigation";
 import {addCompany} from "@/lib/actions";
 import {Checkbox} from "@/components/ui/checkbox";
+import {AnimatePresence, motion} from "framer-motion"
 
 const FormSchema = z.object({
     name: z.string().min(2, {
@@ -105,12 +106,12 @@ export function OnboardingForm({
             oneLiner: "",
             description: "",
             industry: "",
-            founders: [{ name: "", linkedin: "" }],
+            founders: [{name: "", linkedin: ""}],
             plansToRaise: false
         },
     })
 
-    const { fields, append, remove } = useFieldArray({
+    const {fields, append, remove} = useFieldArray({
         control: form.control,
         name: "founders"
     });
@@ -131,6 +132,7 @@ export function OnboardingForm({
             console.error('Error adding company:', error);
         }
     }
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -206,39 +208,37 @@ export function OnboardingForm({
                     )}
                 />
 
-                    <div className="space-y-2">
-                        <FormLabel>Co-founders</FormLabel>
-                        {fields.map((field, index) => (
-                            <div key={field.id} className="space-x-1 flex flex-row">
-                                <div className="w-[50%]">
+                <div
+                    className="space-y-2">
+                    <FormLabel>Co-founders</FormLabel>
+                    {fields.map((field, index) => (
+                        <AnimatePresence mode={"popLayout"}>
+                            <div
+                                key={field.id} className="space-x-1 flex items-center flex-row">
+                                <motion.div
+                                    className="w-[50%]">
                                     <FormField
                                         control={form.control}
                                         name={`founders.${index}.name`}
-                                        render={({ field }) => (
+                                        render={({field}) => (
                                             <FormItem>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
                                                         placeholder="Co-founder name"
-                                                        onBlur={() => {
-                                                            if (index === fields.length - 1 && field.value) {
-                                                                append({ name: "", linkedin: "" });
-                                                            }
-                                                        }}
                                                     />
                                                 </FormControl>
-                                                <FormMessage />
+                                                <FormMessage/>
                                             </FormItem>
                                         )}
                                     />
-                                </div>
-
-                                <Separator orientation="vertical" />
-                                <div className="w-[50%]">
+                                </motion.div>
+                                <Separator orientation="vertical"/>
+                                <motion.div className="w-[50%]">
                                     <FormField
                                         control={form.control}
                                         name={`founders.${index}.linkedin`}
-                                        render={({ field }) => (
+                                        render={({field}) => (
                                             <FormItem>
                                                 <FormControl>
                                                     <Input
@@ -246,20 +246,31 @@ export function OnboardingForm({
                                                         placeholder="LinkedIn URL"
                                                     />
                                                 </FormControl>
-                                                <FormMessage />
+                                                <FormMessage/>
                                             </FormItem>
                                         )}
                                     />
-                                </div>
-
-                                {fields.length > 1 && (
-                                    <Button type="button" onClick={() => remove(index)}>
-                                        <Trash2 />
-                                    </Button>
-                                )}
+                                </motion.div>
+                                <motion.div
+                                    animate={{
+                                        opacity: fields.length > 1 ? 1 : 0,
+                                        filter: fields.length > 1 ? "blur(0px)" : "blur(4px)",
+                                        width: fields.length > 1 ? "auto" : "0",
+                                    }}
+                                    onClick={() => remove(index)}>
+                                    <Trash2
+                                        className="w-5 mx-3 cursor-pointer hover:opacity-70 transition-opacity h-5"/>
+                                </motion.div>
                             </div>
-                        ))}
-                    </div>
+                        </AnimatePresence>
+                    ))}
+                    <motion.a
+                        onClick={() => append({name: "", linkedin: ""})}
+                        className="text-sm cursor-pointer text-slate-400 underline hover:opacity-70 transition-opacity">
+                        Add co-founder +
+                    </motion.a>
+
+                </div>
 
 
                 {/*<FormField*/}
@@ -371,7 +382,7 @@ export function OnboardingForm({
                                     }}
                                 />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage/>
                         </FormItem>
                     )}
                 />
@@ -392,7 +403,7 @@ export function OnboardingForm({
                                     }}
                                 />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage/>
                         </FormItem>
                     )}
                 />
@@ -512,7 +523,7 @@ export function OnboardingForm({
                 <FormField
                     control={form.control}
                     name="logo"
-                    render={({ field }) => (
+                    render={({field}) => (
                         <FormItem>
                             <FormLabel>Logo</FormLabel>
                             <FormControl>
@@ -526,7 +537,7 @@ export function OnboardingForm({
                                     }}
                                 />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage/>
                         </FormItem>
                     )}
                 />
