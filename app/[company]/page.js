@@ -13,6 +13,7 @@ import {ibm_plex_mono} from "@/fonts/ibm_plex_mono";
 
 export default async function Company({params}) {
     const company = await getCompany(params.company)
+    console.log('[company detail debug]', JSON.stringify(company, null, 2));
 
     return <div>
         <div className="max-w-3xl mx-auto md:mt-24 mt-12 px-5 md:px-0">
@@ -64,7 +65,7 @@ export default async function Company({params}) {
                     <h2 className="text-xl font-semibold mb-3">Team</h2>
                     <div className="flex flex-col gap-3">
                         {
-                            company.company_founders.map(({founder}) => <div
+                            company.company_founders?.map(({founder}) => <div
                                     className="flex gap-3"
                                     key={founder.id + "Founder"}>
                                     <img src={founder.photo} alt={`${founder.name} photo`}

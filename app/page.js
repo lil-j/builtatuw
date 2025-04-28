@@ -1,13 +1,29 @@
 "use server"
 
 import Image from "next/image";
-import {getCompanies} from "@/lib/actions";
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
 import CompanyItem from "@/components/directory/CompanyItem";
 import Marquee from "react-fast-marquee";
 import {ibm_plex_mono} from "@/fonts/ibm_plex_mono";
 
 export default async function Home() {
-    const companies = await getCompanies()
+    console.log("[page.js] Home component rendering...");
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+    const { data: companies, error } = await supabase
+  .from('company')
+  .select(`
+    *,
+    logo,
+    company_founders (
+      founder (
+        *,
+        added_socials(*)
+      )
+    )
+  `);
+    console.log("[page.js] Companies received:", companies, error);
     return (
         <div className="">
             <Marquee
