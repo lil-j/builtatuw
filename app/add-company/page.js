@@ -27,7 +27,7 @@ export default async function Onboarding() {
     }
 
     return <div>
-        <Navbar>
+
             <Breadcrumb className={ibm_plex_mono.className + "s cursor-default"}>
                 <BreadcrumbList>
                     <BreadcrumbSeparator className="text-white"/>
@@ -36,7 +36,6 @@ export default async function Onboarding() {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-        </Navbar>
         <div className="max-w-3xl mx-auto mt-16 px-5 md:px-0">
         <h1 className="text-2xl text-black/90 font-bold mb-12">Join the <span
             className="text-purple-600">{companies.length}</span> active

@@ -290,7 +290,6 @@ export default function Onboarding() {
     ];
     const selectedIndustry = industryOptions.find((option) => option.value === industry); // for tagging system
 
-    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_KEY);
 
 
 

@@ -283,7 +283,7 @@ export default function OnboardingContainer() {
     const selectedIndustry = industryOptions.find((option) => option.value === industry);
 
     return (
-        <div className="">
+        <div className="mb-4">
             <div>
                 <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2">
                     Preview</p>
