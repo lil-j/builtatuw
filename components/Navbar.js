@@ -31,10 +31,7 @@ export default function Navbar({ children }) {
                     <Link className={getLinkClass("/")} href="/">
                         Startups
                     </Link>
-                     <Link className={getLinkClass("/founders")} href="/founders">
-                        Founders
-                    </Link>
-                    <Link className={getLinkClass("/add-company")} href="/add-company">
+                    <Link className={getLinkClass("/onboarding")} href="/onboarding">
                         Add Company
                     </Link>
                      <Link className={getLinkClass("/about")} href="/about">

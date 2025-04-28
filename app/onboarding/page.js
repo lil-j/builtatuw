@@ -17,6 +17,8 @@ import { createClient } from '@supabase/supabase-js';
 
 
 export default function Onboarding() {
+    const [url, setUrl] = useState("");
+    const [location, setLocation] = useState("");
     const [name, setName] = useState("Your startup name");
     const [estDate, setEstDate] = useState(null);
     const [founders, setFounders] = useState("Your Name(s) here");
@@ -397,6 +399,10 @@ export default function Onboarding() {
                     setIndustry={setIndustry}
                     logo={uploadedLogo}
                     setLogo={setUploadedLogo}
+                    url={url}
+                    setUrl={setUrl}
+                    location={location}
+                    setLocation={setLocation}
                 />
 
             </div>

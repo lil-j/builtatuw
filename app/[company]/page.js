@@ -29,7 +29,11 @@ export default async function Company({params}) {
                 </BreadcrumbList>
             </Breadcrumb>
             <div className="flex gap-6 items-center">
-                <img src={company.logo} alt={`${company.name} logo`} className="w-24 h-24 bg-gray-200 rounded-full"/>
+                <img
+                    src={company.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(company.name)}&size=96&background=random`}
+                    alt={`${company.name} logo`}
+                    className="w-24 h-24 bg-gray-200 rounded-full"
+                />
                 <div>
                     <h1 className="text-3xl font-semibold">{company.name}</h1>
                     <p className="text-lg opacity-60">{company.one_liner}</p>
@@ -68,7 +72,8 @@ export default async function Company({params}) {
                             company.company_founders?.map(({founder}) => <div
                                     className="flex gap-3"
                                     key={founder.id + "Founder"}>
-                                    <img src={founder.photo} alt={`${founder.name} photo`}
+                                    <img src={founder.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(founder.name)}&size=64&background=random`}
+                                         alt={`${founder.name} photo`}
                                          className="w-16 h-16 bg-gray-200 rounded-full"/>
                                     <div>
                                         <h3 className="text-lg font-medium">{founder.name}</h3>
